@@ -8,7 +8,6 @@ export const createProduct = async (req, res, next) => {
     try {
         const { name, description, category, price, sku, supplierId, lowStockThreshold } = req.body;
 
-        // Check if SKU already exists
         const existingProduct = await Product.findOne({ sku });
         if (existingProduct) {
             return res.status(400).json({
@@ -26,7 +25,7 @@ export const createProduct = async (req, res, next) => {
             sku,
             supplierId,
             lowStockThreshold,
-            createdBy: req.user.id, // From authMiddleware
+            createdBy: req.user.id,
         });
 
         logger.info(`Product created: ${product.sku} by user ${req.user.id}`);
@@ -46,7 +45,6 @@ export const createProduct = async (req, res, next) => {
 // @access  Private (Admin, Manager)
 export const getAllProducts = async (req, res, next) => {
     try {
-        // Admins see all products, Managers see only active
         const filter = req.user.role === "admin" ? {} : { isActive: true };
 
         const products = await Product.find(filter).sort({ createdAt: -1 });
@@ -75,7 +73,6 @@ export const getProductById = async (req, res, next) => {
             });
         }
 
-        // Managers can only see active products
         if (req.user.role === "manager" && !product.isActive) {
             return res.status(404).json({
                 success: false,
@@ -113,7 +110,6 @@ export const updateProduct = async (req, res, next) => {
             }
         }
 
-        // SKU cannot be updated
         if (req.body.sku) {
             return res.status(400).json({
                 success: false,
@@ -160,7 +156,6 @@ export const deleteProduct = async (req, res, next) => {
             });
         }
 
-        // Soft delete
         await product.softDelete();
 
         logger.info(`Product soft-deleted: ${product.sku} by user ${req.user.id}`);

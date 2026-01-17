@@ -49,33 +49,29 @@ const productSchema = new mongoose.Schema(
             default: true,
         },
         createdBy: {
-            type: String, // userId from Users Service
+            type: String,
             required: true,
         },
     },
     {
-        timestamps: true, // adds createdAt and updatedAt
+        timestamps: true,
     }
 );
 
-// Indexes for better query performance
 productSchema.index({ sku: 1 });
 productSchema.index({ category: 1 });
 productSchema.index({ isActive: 1 });
 productSchema.index({ name: "text", description: "text" }); // Text search
 
-// Instance method: Soft delete
 productSchema.methods.softDelete = async function () {
     this.isActive = false;
     return await this.save();
 };
 
-// Static method: Find active products
 productSchema.statics.findActive = function () {
     return this.find({ isActive: true });
 };
 
-// Static method: Search products
 productSchema.statics.searchProducts = function (query) {
     return this.find({
         $or: [

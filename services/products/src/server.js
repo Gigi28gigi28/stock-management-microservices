@@ -9,27 +9,27 @@ import { swaggerServe, swaggerSetup } from "./config/swagger.js";
 import productRoutes from "./routes/productRoutes.js";
 import { errorHandler } from "./middlewares/errorMiddleware.js";
 
-// ES Module __dirname fix
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Load .env from PRODUCTS service root (services/products/.env)
+
 const envPath = path.resolve(__dirname, "../.env");
 console.log("Loading .env from:", envPath);
 const result = dotenv.config({ path: envPath });
 
 if (result.error) {
-    console.error("❌ ERROR: Could not load .env file!");
+    console.error(" ERROR: Could not load .env file!");
     console.error("Path:", envPath);
     console.error("Error:", result.error.message);
     process.exit(1);
 }
 
-console.log("✅ Loaded", Object.keys(result.parsed || {}).length, "environment variables");
+console.log(" Loaded", Object.keys(result.parsed || {}).length, "environment variables");
 
 // Verify MONGO_URI loaded
 if (!process.env.MONGO_URI) {
-    console.error("❌ ERROR: MONGO_URI not found in .env file!");
+    console.error(" ERROR: MONGO_URI not found in .env file!");
     console.error("Expected .env location:", envPath);
     console.error("\nYour .env file exists but MONGO_URI is missing or empty.");
     console.error("\nPlease add this line to your .env:");
@@ -37,7 +37,7 @@ if (!process.env.MONGO_URI) {
     process.exit(1);
 }
 
-console.log("✅ MONGO_URI loaded:", process.env.MONGO_URI);
+console.log(" MONGO_URI loaded:", process.env.MONGO_URI);
 
 // Create Express app
 const app = express();
@@ -79,7 +79,7 @@ app.get("/", (req, res) => {
     });
 });
 
-// Error Handler (must be last)
+// Error Handler
 app.use(errorHandler);
 
 // Server Startup
@@ -88,12 +88,12 @@ const PORT = process.env.PORT || 5002;
 connectDB()
     .then(() => {
         app.listen(PORT, () => {
-            console.log(`\n✅ Products Service running on http://localhost:${PORT}`);
-            console.log(`📚 API Documentation: http://localhost:${PORT}/api-docs`);
-            console.log(`💚 Health Check: http://localhost:${PORT}/api/products/health\n`);
+            console.log(`\n Products Service running on http://localhost:${PORT}`);
+            console.log(` API Documentation: http://localhost:${PORT}/api-docs`);
+            console.log(` Health Check: http://localhost:${PORT}/api/products/health\n`);
         });
     })
     .catch((err) => {
-        console.error("❌ Failed to connect to MongoDB:", err);
+        console.error(" Failed to connect to MongoDB:", err);
         process.exit(1);
     });

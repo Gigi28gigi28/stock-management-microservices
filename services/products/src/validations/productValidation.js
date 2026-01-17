@@ -1,6 +1,4 @@
 import Joi from "joi";
-
-// Create Product Schema
 export const createProductSchema = Joi.object({
     name: Joi.string()
         .min(2)
@@ -60,7 +58,6 @@ export const createProductSchema = Joi.object({
         }),
 });
 
-// Update Product Schema (all fields optional)
 export const updateProductSchema = Joi.object({
     name: Joi.string().min(2).max(100).optional(),
     description: Joi.string().max(500).allow("", null).optional(),
@@ -70,4 +67,4 @@ export const updateProductSchema = Joi.object({
     price: Joi.number().min(0).optional(),
     supplierId: Joi.string().optional(),
     lowStockThreshold: Joi.number().min(0).optional(),
-}).min(1); // At least one field must be provided
+}).min(1); 

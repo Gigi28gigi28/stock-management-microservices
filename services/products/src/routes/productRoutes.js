@@ -14,7 +14,6 @@ import { createProductSchema, updateProductSchema } from "../validations/product
 
 const router = express.Router();
 
-// ==================== HEALTH CHECK ====================
 router.get("/health", (req, res) => {
     res.json({
         status: "UP",
@@ -24,7 +23,6 @@ router.get("/health", (req, res) => {
     });
 });
 
-// ==================== SEARCH ROUTE  ====================
 router.get(
     "/search",
     authMiddleware,
@@ -32,7 +30,6 @@ router.get(
     searchProducts
 );
 
-// ==================== CRUD ROUTES ====================
 router.post(
     "/",
     authMiddleware,
@@ -66,7 +63,7 @@ router.put(
 router.delete(
     "/:id",
     authMiddleware,
-    roleMiddleware("admin"), // Admin only
+    roleMiddleware("admin"),
     deleteProduct
 );
 

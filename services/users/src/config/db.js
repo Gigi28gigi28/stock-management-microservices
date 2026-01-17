@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 import logger from "../utils/logger.js";
 import path from "path";
 
-//dotenv.config();
 dotenv.config({ path: path.resolve(process.cwd(), "../.env") });
 
 const mongoUri = process.env.MONGO_URI;
